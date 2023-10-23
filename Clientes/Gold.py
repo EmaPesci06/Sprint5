@@ -1,7 +1,7 @@
 from Tarjeta import TarjetaDebito, TarjetaCredito
 from Cuentas import (
-    CuentaDeAhorroPesos,
-    CuentaDeAhorroDolares,
+    CajaAhorroPesos,
+    CajaAhorroDolares,
     CuentaCorriente,
     CuentaInversion,
     Transaccion,
@@ -14,21 +14,23 @@ class Gold(Cliente):
         self,
         cliente,
         num_tarjeta_debito,
-        caja_ahorro_pesos,
-        caja_ahorro_dolares=None,
-        cuenta_corriente=None,
+        cajas_ahorro_pesos=2,
+        cajas_ahorro_dolares=0,
+        cuenta_corriente=1,
         tarjetas_credito=[],
         retiros_diarios=20000,
         cuentas_inversion=[],
-        chequera=False,
+        chequera=True,
     ):
         super().__init__(cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo)
         self.tarjeta_de_debito = TarjetaDebito(
             num_tarjeta_debito, tipo="Débito", limite=20000, marca="Visa"
         )
-        self.caja_ahorro_pesos = caja_ahorro_pesos
-        self.caja_ahorro_dolares = caja_ahorro_dolares
-        self.cuenta_corriente = cuenta_corriente
+        self.cajas_ahorro_pesos = [CajaAhorroPesos() for _ in range(cajas_ahorro_pesos)]
+        self.cajas_ahorro_dolares = [
+            CajaAhorroDolares() for _ in range(cajas_ahorro_dolares)
+        ]
+        self.cuenta_corriente = CuentaCorriente() if cuenta_corriente > 0 else None
         self.tarjetas_credito = tarjetas_credito
         self.retiros_diarios = retiros_diarios
         self.cuentas_inversion = cuentas_inversion
@@ -36,11 +38,11 @@ class Gold(Cliente):
 
     def realizar_retiro(self, monto):
         if monto <= self.retiros_diarios:
-            if monto <= self.caja_ahorro_pesos.saldo:
-                self.caja_ahorro_pesos.saldo -= monto
-                return f"Retiro de {monto} pesos exitoso."
-            else:
-                return "Fondos insuficientes en la cuenta de ahorro en pesos."
+            for caja_pesos in self.cajas_ahorro_pesos:
+                if monto <= caja_pesos.saldo:
+                    caja_pesos.saldo -= monto
+                    return f"Retiro de {monto} pesos exitoso."
+            return "Fondos insuficientes en las cuentas de ahorro en pesos."
         else:
             return "El límite diario de retiro es de $20,000 para clientes Gold."
 
@@ -58,10 +60,9 @@ class Gold(Cliente):
         )
         if (
             transaccion.permitido_actual_para_transaccion
-            and monto_con_comision <= self.caja_ahorro_pesos.saldo
+            and monto_con_comision <= self.obtener_saldo_total()
         ):
-            self.caja_ahorro_pesos.saldo -= monto_con_comision
-            cuenta_destino.depositar(monto)
-            return f"Transferencia de {monto} pesos realizada con éxito."
+            # Lógica para realizar la transferencia
+            pass
         else:
-            return "Fondos insuficientes para realizar la transferencia."
+            return "Fondos insuficientes o transacción no permitida para realizar la transferencia."

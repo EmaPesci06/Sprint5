@@ -3,7 +3,7 @@ from Cuentas.CuentaAhorroDolares import CuentaDeAhorroDolares
 from Cuentas.CuentaAhorroPesos import CuentaDeAhorroPesos
 from Cuentas.CuentaCorrienteDolares import CuentaCorrienteDolares
 from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
-from Cliente import Cliente
+from Clientes.Cliente import Cliente
 from Transacciones import Transaccion
 
 

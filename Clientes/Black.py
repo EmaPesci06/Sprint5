@@ -1,12 +1,8 @@
-from Tarjeta import TarjetaDebito, TarjetaCredito
-from Cuentas import (
-    CajaAhorroPesos,
-    CajaAhorroDolares,
-    CuentaCorriente,
-    CuentaInversion,
-    Transaccion,
-)
-from Cliente import Cliente
+from Tarjeta import TarjetaDebito, TarjetaCredito, Tarjeta
+from Cuentas.CajaAhorroPesos import CajaAhorroPesos
+from Cuentas.CajaAhorroDolares import CajaAhorroDolares
+from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
+from Clientes.Cliente import Cliente
 from Transacciones import Transaccion
 
 
@@ -25,13 +21,36 @@ class Black(Cliente):
     ):
         super().__init__(cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo)
         self.tarjetas_de_debito = [
-            TarjetaDebito(f"Debito-{i+1}") for i in range(num_tarjetas_debito)
+            TarjetaDebito(f"Debito-{i+1}", tipo="Débito", limite=10000, marca="Visa")
+            for i in range(num_tarjetas_debito)
         ]
-        self.cajas_ahorro_pesos = [CajaAhorroPesos() for _ in range(cajas_ahorro_pesos)]
+        self.cajas_ahorro_pesos = [
+            CajaAhorroPesos(
+                num_cuenta=f"Cuenta-{i+1}",
+                comision_mensual=5,
+                saldo=123321,
+                monto=12333,
+            )
+            for i in range(len(cajas_ahorro_pesos))
+        ]
         self.cajas_ahorro_dolares = [
-            CajaAhorroDolares() for _ in range(cajas_ahorro_dolares)
+            CajaAhorroDolares(
+                num_cuenta=f"Cuenta-{_+1}",
+                comision_mensual=5,
+                saldo=123321,
+                monto=12333,
+            )
+            for _ in range(cajas_ahorro_dolares)
         ]
-        self.cuentas_corrientes = [CuentaCorriente() for _ in range(cuentas_corrientes)]
+        self.cuentas_corrientes = [
+            CuentaCorrientePesos(
+                num_cuenta=f"Cuenta-{_+1}",
+                comision_mensual=5,
+                saldo=123321,
+                monto=12333,
+            )
+            for _ in range(cuentas_corrientes)
+        ]
         self.tarjetas_credito = tarjetas_credito
         self.retiros_diarios = retiros_diarios
         self.cuentas_inversion = cuentas_inversion

@@ -6,5 +6,4 @@ def obtener_saldo_total(self):
         saldo_total += caja_dolares.saldo
     if self.cuenta_corriente:
         saldo_total += self.cuenta_corriente.saldo
-    # Agregar lógica para sumar el saldo de cuentas de inversión, tarjetas de crédito, etc., si es necesario
     return saldo_total

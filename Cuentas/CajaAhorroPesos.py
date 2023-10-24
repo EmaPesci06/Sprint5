@@ -1,7 +1,7 @@
 from Cuentas.Cuentas import Cuenta
 
 
-class CuentaDeAhorroPesos(Cuenta):
+class CajaAhorroPesos(Cuenta):
     def __init__(self, num_cuenta, saldo, comision_mensual, monto):
         super().__init__(
             num_cuenta,

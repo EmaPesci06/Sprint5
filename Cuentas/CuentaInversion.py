@@ -1,4 +1,4 @@
-from Cuentas import Cuenta
+from Cuentas.Cuentas import Cuenta
 
 
 class CuentaInversion(Cuenta):

@@ -1,6 +1,10 @@
 from Tarjeta import TarjetaDebito
-from Cuentas import CajaAhorroPesos, CajaAhorroDolares, Transaccion
+from Cuentas.CuentaAhorroDolares import CuentaDeAhorroDolares
+from Cuentas.CuentaAhorroPesos import CuentaDeAhorroPesos
+from Cuentas.CuentaCorrienteDolares import CuentaCorrienteDolares
+from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
 from Cliente import Cliente
+from Transacciones import Transaccion
 
 
 class Classic(Cliente):
@@ -16,9 +20,9 @@ class Classic(Cliente):
         self.tarjeta_de_debito = TarjetaDebito(
             num_tarjeta_debito, tipo="Débito", limite=limite_retiro_diario, marca="Visa"
         )
-        self.caja_ahorro_pesos = CajaAhorroPesos()
+        self.caja_ahorro_pesos = CuentaCorrientePesos()
         self.caja_ahorro_dolares = (
-            CajaAhorroDolares() if tiene_caja_ahorro_dolares else None
+            CuentaCorrienteDolares() if tiene_caja_ahorro_dolares else None
         )
         self.retiros_diarios_sin_comision = retiros_diarios_sin_comision
         self.limite_retiro_diario = limite_retiro_diario

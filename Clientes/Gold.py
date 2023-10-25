@@ -1,12 +1,12 @@
-from Tarjeta import TarjetaDebito, TarjetaCredito
-from Cuentas import (
-    CajaAhorroPesos,
-    CajaAhorroDolares,
-    CuentaCorriente,
-    CuentaInversion,
-    Transaccion,
-)
-from Cliente import Cliente
+from Tarjeta import TarjetaCredito, TarjetaDebito
+from Cuentas.Cuentas import Cuenta
+from Cuentas.CajaAhorroDolares import CajaAhorroDolares
+from Cuentas.CajaAhorroPesos import CajaAhorroPesos
+from Cuentas.CuentaCorrienteDolares import CuentaCorrienteDolares
+from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
+from Cuentas.CuentaInversion import CuentaInversion
+from Clientes.Cliente import Cliente
+from Transacciones import Transaccion
 
 
 class Gold(Cliente):
@@ -15,7 +15,6 @@ class Gold(Cliente):
         cliente,
         num_tarjeta_debito,
         cajas_ahorro_pesos=2,
-        cajas_ahorro_dolares=0,
         cuenta_corriente=1,
         tarjetas_credito=[],
         retiros_diarios=20000,
@@ -26,11 +25,27 @@ class Gold(Cliente):
         self.tarjeta_de_debito = TarjetaDebito(
             num_tarjeta_debito, tipo="Débito", limite=20000, marca="Visa"
         )
-        self.cajas_ahorro_pesos = [CajaAhorroPesos() for _ in range(cajas_ahorro_pesos)]
-        self.cajas_ahorro_dolares = [
-            CajaAhorroDolares() for _ in range(cajas_ahorro_dolares)
+        self.cajas_ahorro_pesos = [
+            CajaAhorroPesos(
+                num_cuenta=f"Cuenta-{i+1}",
+                saldo=0,  # Puedes establecer el saldo inicial a 0 o al valor que desees
+                comision_mensual=5,  # Establece el valor adecuado para la comisión mensual
+                monto=0,  # Establece el valor inicial del monto a 0 o al valor que desees
+            )
+            for i in range(cajas_ahorro_pesos)
         ]
-        self.cuenta_corriente = CuentaCorriente() if cuenta_corriente > 0 else None
+
+        self.cuenta_corriente = (
+            CuentaCorrientePesos(
+                num_cuenta=f"Cuenta-Corriente-{cliente.dni}",  # Puedes personalizar el número de cuenta como desees
+                saldo=0,  # Puedes establecer el saldo inicial a 0 o al valor que desees
+                comision_mensual=5,  # Establece el valor adecuado para la comisión mensual
+                monto=0,  # Establece el valor inicial del monto a 0 o al valor que desees
+            )
+            if cuenta_corriente > 0
+            else None
+        )
+
         self.tarjetas_credito = tarjetas_credito
         self.retiros_diarios = retiros_diarios
         self.cuentas_inversion = cuentas_inversion

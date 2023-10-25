@@ -1,11 +1,7 @@
-from Tarjeta import (
-    TarjetaDebito,
-    TarjetaCredito,
-)  # Importa las clases de tarjetas necesarias
-from Clientes.Black import (
-    Black,
-)  # Asegúrate de importar la clase Black desde su ubicación correcta
+from Tarjeta import Tarjeta, TarjetaCredito, TarjetaDebito
+from Clientes.Black import Black
 from Clientes.Cliente import Cliente
+from Clientes.Gold import Gold
 from Clientes.Classic import Classic
 from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
 from Cuentas.CuentaCorrienteDolares import CuentaCorrienteDolares
@@ -80,3 +76,26 @@ cliente_black = Black(
 )
 
 # Ahora puedes usar el objeto cliente_black para realizar operaciones específicas para clientes Black
+# Suponiendo que tienes un objeto Cliente llamado cliente existente
+cliente_existente = Cliente(
+    nombre="NombreCliente", apellido="ApellidoCliente", dni="123456789", tipo="Gold"
+)
+
+# Crear un cliente Gold
+cliente_gold = Gold(
+    cliente=cliente_existente,
+    num_tarjeta_debito="1234-5678-9012-3456",  # Número de tarjeta de débito
+    cajas_ahorro_pesos=2,  # Dos cuentas de ahorro en pesos
+    cuenta_corriente=1,  # Una cuenta corriente
+    tarjetas_credito=[],  # Sin tarjetas de crédito inicialmente
+    retiros_diarios=20000,  # Límite diario de retiro
+    cuentas_inversion=[],  # Sin cuentas de inversión inicialmente
+    chequera=True,  # Tiene chequera
+)
+
+# Ahora puedes usar el objeto cliente_gold para realizar operaciones, por ejemplo:
+monto_retiro = 15000
+resultado_retiro = cliente_gold.realizar_retiro(monto_retiro)
+print(resultado_retiro)  # Esto imprimirá el resultado del retiro
+
+# Ten en cuenta que debes proporcionar los valores correctos para los argumentos del constructor según las necesidades de tu aplicación.

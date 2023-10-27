@@ -1,101 +1,66 @@
-from Tarjeta import Tarjeta, TarjetaCredito, TarjetaDebito
+from Tarjeta import TarjetaDebito
+from Clientes.Classic import Classic
+from Clientes.Gold import Gold
 from Clientes.Black import Black
 from Clientes.Cliente import Cliente
-from Clientes.Gold import Gold
-from Clientes.Classic import Classic
-from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
-from Cuentas.CuentaCorrienteDolares import CuentaCorrienteDolares
-from Cuentas.CajaAhorroDolares import CajaAhorroDolares
 from Cuentas.CajaAhorroPesos import CajaAhorroPesos
-import json
-
-# Crear un objeto de la clase Cliente (asegúrate de que tengas la clase Cliente definida)
-cliente = Cliente(nombre="Nombre", apellido="Apellido", dni="123456789", tipo="Classic")
-
-# Número de tarjeta de débito del cliente
-num_tarjeta_debito = (
-    "1234-5678-9101-1121"  # Reemplaza esto con el número real de la tarjeta
-)
-
-# Crear un objeto de la clase CuentaCorrientePesos con los argumentos necesarios
-cuenta_pesos = CuentaCorrientePesos(
-    num_cuenta="123456", saldo=1000, comision_mensual=10, monto=500
-)
-# Crear un objeto de la clase CuentaCorrienteDolares con los argumentos necesarios
-cuenta_dolares = CuentaCorrienteDolares(
-    num_cuenta="567890", saldo=500, comision_mensual=5, monto=100
-)
-
-# Crear un cliente Classic con la cuenta de ahorros en pesos y dólares proporcionadas
-cliente_classic = Classic(
-    cliente=cliente,
-    num_tarjeta_debito=num_tarjeta_debito,
-    cuenta_ahorro_pesos=cuenta_pesos,  # Pasa la cuenta de ahorros en pesos como un argumento
-    tiene_caja_ahorro_dolares=True,
-    cuenta_ahorro_dolares=cuenta_dolares,  # Pasa la cuenta de ahorros en dólares como un argumento
-)
+from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
 
 
-# Crear un objeto de la clase Cliente
-cliente = Cliente(
-    nombre="Nombre del Cliente",
-    apellido="Apellido del Cliente",
-    dni="123456789",
-    tipo="Black",
-)
+def crear_cliente():
+    tipo_cliente = input(
+        "Ingrese el tipo de cliente (Classic/Gold/Black): "
+    ).capitalize()
+    nombre = input("Ingrese el nombre del cliente: ")
+    apellido = input("Ingrese el apellido del cliente: ")
+    dni = input("Ingrese el DNI del cliente: ")
 
-# Crear tarjetas de débito y crédito si es necesario
-tarjeta_debito = TarjetaDebito(123431234312, "Debito-123", 200000, "VISA")
-tarjeta_credito = TarjetaCredito(12331234312, "Credito-456", 140000, "MASTERCARD")
+    if tipo_cliente == "Classic":
+        num_tarjeta_debito = input("Ingrese el número de tarjeta de débito: ")
+        cliente = Classic(
+            Cliente(nombre, apellido, dni, tipo_cliente),
+            num_tarjeta_debito,
+            CajaAhorroPesos("12345", 0.0, 0.0, 0.0),
+            CuentaCorrientePesos("67890", 0.0, 0.0, 0.0),
+            5,
+            10000,
+        )
+    elif tipo_cliente == "Gold":
+        retiros_diarios = int(input("Ingrese el límite diario de retiros: "))
+        caja_ahorro_pesos_saldo = float(
+            input("Ingrese el saldo de la cuenta de ahorro en pesos: ")
+        )
+        cliente = Gold(
+            Cliente(nombre, apellido, dni, tipo_cliente),
+            "0000-0000-0000-0000",
+            cajas_ahorro_pesos=2,
+            cuenta_corriente=1,
+            retiros_diarios=retiros_diarios,
+            cuentas_inversion=[],
+            chequera=True,
+        )
+        for caja in cliente.cajas_ahorro_pesos:
+            caja.saldo = caja_ahorro_pesos_saldo
+        if cliente.cuenta_corriente:
+            cliente.cuenta_corriente.saldo = caja_ahorro_pesos_saldo
+    elif tipo_cliente == "Black":
+        cliente = Black(
+            Cliente(nombre, apellido, dni, tipo_cliente),
+            num_tarjetas_debito=5,
+            cajas_ahorro_pesos=5,
+            cajas_ahorro_dolares=5,
+            cuentas_corrientes=3,
+            retiros_diarios=100000,
+            cuentas_inversion=[],
+            chequeras=2,
+        )
+    else:
+        print("Tipo de cliente no válido.")
+        return None
 
-# Crear cuentas de ahorro y cuentas corrientes si es necesario
-caja_ahorro_pesos = CajaAhorroPesos(
-    num_cuenta="123456", saldo=1000, comision_mensual=5, monto=100
-)
-caja_ahorro_dolares = CajaAhorroDolares(
-    num_cuenta="3312312", saldo=200000, comision_mensual=5, monto=124312
-)
-cuenta_corriente = CuentaCorrientePesos(
-    num_cuenta="132345",
-    saldo=21343,
-    monto=132312323,
-    comision_mensual=5,
-)
+    return cliente
 
-# Crear un cliente Black usando el objeto de la clase Cliente y otros detalles necesarios
-cliente_black = Black(
-    cliente=cliente,
-    num_tarjetas_debito=2,  # Número de tarjetas de débito
-    tarjetas_credito=[tarjeta_credito],  # Lista de tarjetas de crédito
-    cajas_ahorro_pesos=[caja_ahorro_pesos],  # Lista de cuentas de ahorro en pesos
-    cajas_ahorro_dolares=[caja_ahorro_dolares],  # Lista de cuentas de ahorro en dólares
-    cuentas_corrientes=[cuenta_corriente],  # Lista de cuentas corrientes
-    retiros_diarios=100000,  # Límite de retiros diarios
-    cuentas_inversion=[],  # Lista de cuentas de inversión (vacía en este ejemplo)
-    chequeras=2,  # Número de chequeras
-)
 
-# Ahora puedes usar el objeto cliente_black para realizar operaciones específicas para clientes Black
-# Suponiendo que tienes un objeto Cliente llamado cliente existente
-cliente_existente = Cliente(
-    nombre="NombreCliente", apellido="ApellidoCliente", dni="123456789", tipo="Gold"
-)
-
-# Crear un cliente Gold
-cliente_gold = Gold(
-    cliente=cliente_existente,
-    num_tarjeta_debito="1234-5678-9012-3456",  # Número de tarjeta de débito
-    cajas_ahorro_pesos=2,  # Dos cuentas de ahorro en pesos
-    cuenta_corriente=1,  # Una cuenta corriente
-    tarjetas_credito=[],  # Sin tarjetas de crédito inicialmente
-    retiros_diarios=20000,  # Límite diario de retiro
-    cuentas_inversion=[],  # Sin cuentas de inversión inicialmente
-    chequera=True,  # Tiene chequera
-)
-
-# Ahora puedes usar el objeto cliente_gold para realizar operaciones, por ejemplo:
-monto_retiro = 15000
-resultado_retiro = cliente_gold.realizar_retiro(monto_retiro)
-print(resultado_retiro)  # Esto imprimirá el resultado del retiro
-
-# Ten en cuenta que debes proporcionar los valores correctos para los argumentos del constructor según las necesidades de tu aplicación.
+cliente_creado = crear_cliente()
+if cliente_creado:
+    print(f"Cliente creado:\n{cliente_creado}")

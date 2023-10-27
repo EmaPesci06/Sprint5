@@ -31,7 +31,7 @@ class Black(Cliente):
                 saldo=123321,
                 monto=12333,
             )
-            for i in range(len(cajas_ahorro_pesos))
+            for i in range(cajas_ahorro_pesos)
         ]
         self.cajas_ahorro_dolares = [
             CajaAhorroDolares(
@@ -40,7 +40,7 @@ class Black(Cliente):
                 saldo=123321,
                 monto=12333,
             )
-            for _ in range(len(cajas_ahorro_dolares))
+            for _ in range(cajas_ahorro_dolares)
         ]
         self.cuentas_corrientes = [
             CuentaCorrientePesos(
@@ -49,7 +49,7 @@ class Black(Cliente):
                 saldo=123321,
                 monto=12333,
             )
-            for _ in range(len(cuentas_corrientes))
+            for _ in range(cuentas_corrientes)
         ]
         self.tarjetas_credito = tarjetas_credito
         self.retiros_diarios = retiros_diarios

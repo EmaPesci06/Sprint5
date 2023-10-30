@@ -19,7 +19,9 @@ class Black(Cliente):
         cuentas_inversion=[],
         chequeras=2,
     ):
-        super().__init__(cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo)
+        super().__init__(
+            cliente.numero, cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo
+        )
         self.tarjetas_de_debito = [
             TarjetaDebito(f"Debito-{i+1}", tipo="Débito", limite=10000, marca="Visa")
             for i in range(num_tarjetas_debito)

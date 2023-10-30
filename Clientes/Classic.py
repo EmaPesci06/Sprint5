@@ -1,6 +1,4 @@
 from Tarjeta import TarjetaDebito
-from Cuentas.CajaAhorroPesos import CajaAhorroPesos
-from Cuentas.CajaAhorroDolares import CajaAhorroDolares
 from Cuentas.CuentaCorrienteDolares import CuentaCorrienteDolares
 from Cuentas.CuentaCorrientePesos import CuentaCorrientePesos
 from Clientes.Cliente import Cliente
@@ -14,11 +12,12 @@ class Classic(Cliente):
         num_tarjeta_debito,
         cuenta_ahorro_pesos=None,
         cuenta_ahorro_dolares=None,
-        tiene_caja_ahorro_dolares=False,
         retiros_diarios_sin_comision=5,
         limite_retiro_diario=10000,
     ):
-        super().__init__(cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo)
+        super().__init__(
+            cliente.numero, cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo
+        )
         self.tarjeta_de_debito = TarjetaDebito(
             num_tarjeta_debito, tipo="Débito", limite=limite_retiro_diario, marca="Visa"
         )

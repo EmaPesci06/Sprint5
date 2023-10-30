@@ -21,7 +21,9 @@ class Gold(Cliente):
         cuentas_inversion=[],
         chequera=True,
     ):
-        super().__init__(cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo)
+        super().__init__(
+            cliente.numero, cliente.nombre, cliente.apellido, cliente.dni, cliente.tipo
+        )
         self.tarjeta_de_debito = TarjetaDebito(
             num_tarjeta_debito, tipo="Débito", limite=20000, marca="Visa"
         )
